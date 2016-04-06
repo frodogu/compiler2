@@ -76,7 +76,7 @@ public class ConstantFolder
             "org.apache.bcel.generic.LUSHR"
     ));
 
-    ArrayList<String> unList = new ArrayList<>(Arrays.asList(
+    ArrayList<String> unaryInstructionList = new ArrayList<>(Arrays.asList(
             "org.apache.bcel.generic.DNEG",
             "org.apache.bcel.generic.FNEG",
             "org.apache.bcel.generic.INEG",
@@ -161,7 +161,7 @@ public class ConstantFolder
 	        }
 	        String cl = ins.getClass().getName();
 	        //System.out.println(cl);
-	        if (unList.contains(cl))
+	        if (unaryInstructionList.contains(cl))
 	        {
 	            //System.out.println(cl+" is an unary instruction");
 	            return true;
