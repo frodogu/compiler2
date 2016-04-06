@@ -876,7 +876,7 @@ public class ConstantFolder
 	    
 
 	/***
-	优化函数
+	没有循环时候的优化
 	***/
 	    public boolean optimizeMethod(ClassGen cgen, ConstantPoolGen cpgen, Method method)
 	    {
@@ -1289,7 +1289,7 @@ public class ConstantFolder
 
 
  	/***
-	优化函数中的变量
+	有循环时候的优化
 	***/
 	    public boolean optimizeMethodVars(ClassGen cgen, ConstantPoolGen cpgen, Method method) //Assume no loops in code, aggressively optimise
 	    {
