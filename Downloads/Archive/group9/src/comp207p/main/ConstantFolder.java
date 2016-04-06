@@ -37,7 +37,7 @@ public class ConstantFolder
 	JavaClass original = null;
 	JavaClass optimized = null;
 
-    ArrayList<String> binaryOperationList = new ArrayList<>(Arrays.asList("org.apache.bcel.generic.DADD",
+    ArrayList<String> binList = new ArrayList<>(Arrays.asList("org.apache.bcel.generic.DADD",
             "org.apache.bcel.generic.FADD",
             "org.apache.bcel.generic.IADD",
             "org.apache.bcel.generic.LADD",
@@ -76,7 +76,7 @@ public class ConstantFolder
             "org.apache.bcel.generic.LUSHR"
     ));
 
-    ArrayList<String> unaryInstructionList = new ArrayList<>(Arrays.asList(
+    ArrayList<String> unList = new ArrayList<>(Arrays.asList(
             "org.apache.bcel.generic.DNEG",
             "org.apache.bcel.generic.FNEG",
             "org.apache.bcel.generic.INEG",
@@ -135,6 +135,12 @@ public class ConstantFolder
 			e.printStackTrace();
 		}
 	}
+
+
+
+	/***
+	判断Instruction 类型
+	***/
 	
 	   public boolean isBinaryOperation(Instruction ins)
 	    {
@@ -144,7 +150,7 @@ public class ConstantFolder
 	        }
 	        String cl = ins.getClass().getName();
 	        //System.out.println(cl);
-	        if (binaryOperationList.contains(cl))
+	        if (binList.contains(cl))
 	        {
 	            //System.out.println(cl+" is a binary instruction");
 	            return true;
@@ -161,7 +167,7 @@ public class ConstantFolder
 	        }
 	        String cl = ins.getClass().getName();
 	        //System.out.println(cl);
-	        if (unaryInstructionList.contains(cl))
+	        if (unList.contains(cl))
 	        {
 	            //System.out.println(cl+" is an unary instruction");
 	            return true;
@@ -222,6 +228,11 @@ public class ConstantFolder
 	        return false;
 	    }
 
+
+
+	/***
+	Add result to all kinds of instructions
+	***/
 	    public InstructionHandle addresulttocp(ConstantPoolGen cpgen, Object bottom, Object top, String ins, InstructionList instList, InstructionHandle handle, Map<Integer, Integer> exceptionmap)
 	    {
 	        InstructionHandle result = null;
@@ -829,6 +840,10 @@ public class ConstantFolder
 	    }
 
 
+
+	/***
+	检测循环
+	***/
 	    public boolean detectLoops(ClassGen cgen, ConstantPoolGen cpgen, Method method)
 	    {
 	        // Get the Code of the method, which is a collection of bytecode instructions
@@ -858,6 +873,11 @@ public class ConstantFolder
 	    }
 
 
+	    
+
+	/***
+	优化函数
+	***/
 	    public boolean optimizeMethod(ClassGen cgen, ConstantPoolGen cpgen, Method method)
 	    {
 	        boolean unfinished = false;
@@ -876,16 +896,6 @@ public class ConstantFolder
 
 	        CodeException[] table = method.getCode().getExceptionTable();
 
-//	        if(table == null){
-//	            System.out.println("table was null");
-//	        }
-//	        else{
-//	            System.out.println("table was nawt null");
-//	            for (int m = 0; m<table.length; m++){
-	//
-//	                System.out.println(table[m].toString());
-//	            }
-//	        }
 
 	        Map<Integer, Integer> exceptionmap = new HashMap<Integer, Integer>();
 
@@ -909,8 +919,7 @@ public class ConstantFolder
 	            }
 	        }
 
-//	        System.out.println("exceptionmap.toString()");
-//	        System.out.println(exceptionmap.toString());
+
 
 	        // InstructionHandle is a wrapper for actual Instructions
 	        for (InstructionHandle handle : instList.getInstructionHandles())
@@ -919,7 +928,7 @@ public class ConstantFolder
 	            if (isCPInstruction(handle.getInstruction()) && isUnaryInstruction(handle.getNext().getInstruction()))
 	            {
 	                // fold unary
-//	                System.out.println("Test A");
+
 	                unfinished = true;
 
 
@@ -961,7 +970,7 @@ public class ConstantFolder
 	            else if (isCPInstruction(handle.getInstruction()) && isCPInstruction(handle.getNext().getInstruction()) && isBinaryOperation(handle.getNext().getNext().getInstruction()))
 	            {
 	                // fold binary
-//	                System.out.println("Test B");
+	                //System.out.println("Test B");
 
 	                unfinished = true;
 
@@ -1022,7 +1031,7 @@ public class ConstantFolder
 	            //the last 2 checks if the branch instructions are to the correct instruction handles
 	            {
 	                // fold comparison
-//	                System.out.println("Test C");
+					// System.out.println("Test C");
 	                unfinished = true;
 
 
@@ -1074,7 +1083,7 @@ public class ConstantFolder
 	            //the last 2 checks if the branch instructions are to the correct instruction handles
 	            {
 	                // fold binary
-//	                System.out.println("Test D");
+                //	System.out.println("Test D");
 
 	                unfinished = true;
 
@@ -1144,6 +1153,9 @@ public class ConstantFolder
 	        return unfinished;
 	    }
 
+	/***
+	删除代码
+	***/
 	    public void delete_instructions(InstructionHandle handle, InstructionHandle new_target, InstructionHandle gotoins, InstructionList instList)
 	    { //this function sets newtarget to the target of gotoins and deletes all instructions from currenthandle to new_target. If gotoins is null then currenthandle is handle and new_target is unchanged so it just deletes instructions from handle to new_target.
 	        InstructionHandle currenthandle = handle;
@@ -1176,7 +1188,7 @@ public class ConstantFolder
 
 	            } catch (TargetLostException e)
 	            { //gratuitously copied from https://commons.apache.org/proper/commons-bcel/apidocs/org/apache/bcel/generic/TargetLostException.html
-//	                System.out.println("Testing EE");
+                //System.out.println("Testing EE");
 	                InstructionHandle[] targets = e.getTargets();
 	                for (int i = 0; i < targets.length; i++)
 	                {
@@ -1222,7 +1234,7 @@ public class ConstantFolder
 
 	            } catch (TargetLostException e)
 	            { //gratuitously copied from https://commons.apache.org/proper/commons-bcel/apidocs/org/apache/bcel/generic/TargetLostException.html
-//	                System.out.println("Testing EE");
+	                //System.out.println("Testing EE");
 	                InstructionHandle[] targets = e.getTargets();
 	                for (int i = 0; i < targets.length; i++)
 	                {
@@ -1235,7 +1247,9 @@ public class ConstantFolder
 	        }
 	    }
 
-
+ 	/***
+	修改代码
+	***/
 	    public void replace_instructions(InstructionHandle handle, InstructionHandle endhandle, InstructionHandle new_target, InstructionList instList)
 	    { //this function sets deletes all instructions from currenthandle to endhandle not including endhandle.
 	        InstructionHandle currenthandle = handle;
@@ -1260,7 +1274,7 @@ public class ConstantFolder
 
 	            } catch (TargetLostException e)
 	            { //gratuitously copied from https://commons.apache.org/proper/commons-bcel/apidocs/org/apache/bcel/generic/TargetLostException.html
-//	                System.out.println("Testing EE");
+	                //System.out.println("Testing EE");
 	                InstructionHandle[] targets = e.getTargets();
 	                for (int i = 0; i < targets.length; i++)
 	                {
@@ -1274,10 +1288,12 @@ public class ConstantFolder
 	    }
 
 
+ 	/***
+	优化函数中的变量
+	***/
 	    public boolean optimizeMethodVars(ClassGen cgen, ConstantPoolGen cpgen, Method method) //Assume no loops in code, aggressively optimise
 	    {
-//	        System.out.println("+++++");
-//	        System.out.println(method.getName());
+
 
 
 	        boolean unfinished = false;
@@ -1296,16 +1312,7 @@ public class ConstantFolder
 
 	        CodeException[] table = method.getCode().getExceptionTable();
 
-//	        if(table == null){
-//	            System.out.println("table was null");
-//	        }
-//	        else{
-//	            System.out.println("table was nawt null");
-//	            for (int m = 0; m<table.length; m++){
-	//
-//	                System.out.println(table[m].toString());
-//	            }
-//	        }
+
 
 	        Map<Integer, Integer> exceptionmap = new HashMap<Integer, Integer>();
 	        Map<Integer, ObjectType> exceptiontypesmap = new HashMap<Integer, ObjectType>();
@@ -1334,8 +1341,8 @@ public class ConstantFolder
 	            }
 	        }
 
-//	        System.out.println("exceptionmap.toString()");
-//	        System.out.println(exceptionmap.toString());
+	        //System.out.println("exceptionmap.toString()");
+	        //System.out.println(exceptionmap.toString());
 
 
 	        // InstructionHandle is a wrapper for actual Instructions
@@ -1347,21 +1354,19 @@ public class ConstantFolder
 	        while (restart)
 	        {
 	            restart = false;
-//	            System.out.println("while loop restarting");
+	            //System.out.println("while loop restarting");
 
 
 	            for (InstructionHandle handle : instList.getInstructionHandles())
 	            {
-//	            System.out.println("for loop restarting");
-//	            System.out.println(varmap.toString());
+	            //System.out.println("for loop restarting");
+	            //System.out.println(varmap.toString());
 	                // if ldc istore, put value into hashmap
 
 	                if (isCPInstruction(handle.getInstruction()) && handle.getNext().getInstruction() instanceof StoreInstruction)
 	                {
 	                    // fold unary
-//	                System.out.println("Test G");
-	                    //unfinished = true;
-	                    //restart = true;
+
 
 
 	                    Instruction ins = handle.getInstruction();
@@ -1394,7 +1399,7 @@ public class ConstantFolder
 	                else if (handle.getInstruction() instanceof StoreInstruction && !(handle.getInstruction() instanceof ASTORE) && isCPInstruction(handle.getPrev().getInstruction()))
 	                {
 	                    // fold unary
-//	                System.out.println("Test G2");
+	                //System.out.println("Test G2");
 	                    //unfinished = true;
 	                    //restart = true;
 
@@ -1426,10 +1431,10 @@ public class ConstantFolder
 	                //if there's a store instruction and we don't know what's being stored, delete it from the variable map
 	                else if (handle.getInstruction() instanceof StoreInstruction && !(handle.getInstruction() instanceof ASTORE) && !isCPInstruction(handle.getPrev().getInstruction()))
 	                {
-//	                System.out.println("Test H");
+	                //System.out.println("Test H");
 	                    int varindex = ((StoreInstruction) handle.getInstruction()).getIndex();
 	                    varmap.remove(varindex);
-//	                System.out.println(varmap.toString());
+	                //System.out.println(varmap.toString());
 	                    if (restart == true)
 	                    {
 	                        break;
@@ -1440,7 +1445,7 @@ public class ConstantFolder
 	                {
 	                    unfinished = true;
 	                    restart = true;
-//	                System.out.println("Test I");
+	                //System.out.println("Test I");
 	                    int key = ((LoadInstruction) handle.getInstruction()).getIndex();
 
 
@@ -1467,7 +1472,7 @@ public class ConstantFolder
 	                else if (isCPInstruction(handle.getInstruction()) && isUnaryInstruction(handle.getNext().getInstruction()))
 	                {
 	                    // fold unary
-//	                System.out.println("Test J");
+	                //System.out.println("Test J");
 	                    unfinished = true;
 	                    restart = true;
 
@@ -1502,7 +1507,7 @@ public class ConstantFolder
 
 	                    } catch (TargetLostException e)
 	                    {
-//	                    System.out.println("Testing A");
+	                    //System.out.println("Testing A");
 	                        // TODO Auto-generated catch block
 	                        e.printStackTrace();
 	                    }
@@ -1514,11 +1519,11 @@ public class ConstantFolder
 
 	                    unfinished = true;
 	                    restart = true;
-//	                System.out.println("Test K");
+	                //System.out.println("Test K");
 
-//	                System.out.println(handle.getInstruction().getClass().getName());
-//	                System.out.println(handle.getNext().getInstruction().getClass().getName());
-//	                System.out.println(handle.getNext().getNext().getInstruction().getClass().getName());
+	                //System.out.println(handle.getInstruction().getClass().getName());
+	                //System.out.println(handle.getNext().getInstruction().getClass().getName());
+                //System.out.println(handle.getNext().getNext().getInstruction().getClass().getName());
 
 	                    Object bottom = new Object(); //first is second on stack
 	                    Object top = new Object(); //second is top on stack
@@ -1556,7 +1561,7 @@ public class ConstantFolder
 	                    if (new_target == null)
 	                    { //exception thrown, do not optimise
 
-//	                    System.out.println("just got real");
+	                    //System.out.println("just got real");
 	                        handle.addAttribute("NoOptimise", 1);
 	                    } else
 	                    {
@@ -1579,7 +1584,7 @@ public class ConstantFolder
 	                {
 	                    // fold comparison
 
-//	                System.out.println("Test L");
+	                //System.out.println("Test L");
 	                    unfinished = true;
 	                    restart = true;
 
@@ -1615,7 +1620,6 @@ public class ConstantFolder
 
 	                    } catch (TargetLostException e)
 	                    {
-//	                    System.out.println("Testing C");
 	                        // TODO Auto-generated catch block
 	                        e.printStackTrace();
 	                    }
@@ -1634,7 +1638,6 @@ public class ConstantFolder
 	                {
 	                    // fold binary
 
-//	                System.out.println("Test M");
 	                    unfinished = true;
 	                    restart = true;
 
@@ -1686,7 +1689,6 @@ public class ConstantFolder
 
 	                        } catch (TargetLostException e)
 	                        { //gratuitously copied from https://commons.apache.org/proper/commons-bcel/apidocs/org/apache/bcel/generic/TargetLostException.html
-//	                        System.out.println("target lost");
 	                            InstructionHandle[] targets = e.getTargets();
 	                            for (int i = 0; i < targets.length; i++)
 	                            {
@@ -1707,7 +1709,6 @@ public class ConstantFolder
 	                //zero compare
 	                {
 
-//	                System.out.println("Test NN");
 	                    // fold comparison
 	                    unfinished = true;
 	                    restart = true;
@@ -1746,14 +1747,13 @@ public class ConstantFolder
 	                    // fold binary
 
 
-//	                System.out.println("Test OO");
 
-//	                System.out.println(handle.getInstruction().getClass().getName());
-//	                System.out.println(((BIPUSH)handle.getInstruction()).getValue());
-//	                System.out.println(handle.getNext().getInstruction().getClass().getName());
-//	                System.out.println(((SIPUSH)handle.getNext().getInstruction()).getValue());
-//	                System.out.println(handle.getNext().getNext().getInstruction().getClass().getName());
-//	                System.out.println(((IF_ICMPLE)handle.getNext().getNext().getInstruction()).getTarget());
+	             //   System.out.println(handle.getInstruction().getClass().getName());
+	            //    System.out.println(((BIPUSH)handle.getInstruction()).getValue());
+               // System.out.println(handle.getNext().getInstruction().getClass().getName());
+               // System.out.println(((SIPUSH)handle.getNext().getInstruction()).getValue());
+              // System.out.println(handle.getNext().getNext().getInstruction().getClass().getName());
+              //System.out.println(((IF_ICMPLE)handle.getNext().getNext().getInstruction()).getTarget());
 
 
 	                    unfinished = true;
@@ -1799,7 +1799,6 @@ public class ConstantFolder
 
 	                }
 
-//	            System.out.println(methodGen.getMethod().getCode());
 
 	            }
 	        }
@@ -1807,14 +1806,14 @@ public class ConstantFolder
 
 	        for (InstructionHandle handle : instList.getInstructionHandles())
 	        {
-//	            System.out.println("for loop finished");
-//	            System.out.println(varmap.toString());
+	            //System.out.println("for loop finished");
+	            //System.out.println(varmap.toString());
 	            // if ldc istore, put value into hashmap
 
 	            if (isCPInstruction(handle.getInstruction()) && handle.getNext().getInstruction() instanceof StoreInstruction)
 	            {
 	                // fold unary
-//	                System.out.println("Deleting redundant store instruction!");
+	              //  System.out.println("Deleting redundant store instruction!");
 
 
 	                InstructionHandle new_target = handle.getNext().getNext();
@@ -1873,9 +1872,9 @@ public class ConstantFolder
 	            {
 	                if (handle.getAttribute("origpos") == key)
 	                {
-//	                        System.out.println("JACKPOT!!!");
-//	                        System.out.println(method.getName());
-//	                        System.out.println(key.toString()+ value.toString());
+	                       // System.out.println("JACKPOT!!!");
+	                       // System.out.println(method.getName());
+	                       // System.out.println(key.toString()+ value.toString());
 	                    for (InstructionHandle hand : instList.getInstructionHandles())
 	                    {
 
@@ -1905,7 +1904,9 @@ public class ConstantFolder
 	
 	
 	
-	
+	/***
+	主函数。
+	***/
 	public void optimize()
 	{
 		ClassGen cgen = new ClassGen(original);
