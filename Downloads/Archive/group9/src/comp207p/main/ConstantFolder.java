@@ -37,7 +37,7 @@ public class ConstantFolder
 	JavaClass original = null;
 	JavaClass optimized = null;
 
-    ArrayList<String> binList = new ArrayList<>(Arrays.asList("org.apache.bcel.generic.DADD",
+    ArrayList<String> binaryOperationList = new ArrayList<>(Arrays.asList("org.apache.bcel.generic.DADD",
             "org.apache.bcel.generic.FADD",
             "org.apache.bcel.generic.IADD",
             "org.apache.bcel.generic.LADD",
@@ -144,7 +144,7 @@ public class ConstantFolder
 	        }
 	        String cl = ins.getClass().getName();
 	        //System.out.println(cl);
-	        if (binList.contains(cl))
+	        if (binaryOperationList.contains(cl))
 	        {
 	            //System.out.println(cl+" is a binary instruction");
 	            return true;
