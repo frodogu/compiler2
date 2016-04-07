@@ -36,7 +36,7 @@ public class ConstantFolder
 	JavaClass original = null;
 	JavaClass optimized = null;
 	
-	ArrayList<String> binList = new ArrayList<>(Arrays.asList(
+	ArrayList<String> binaryOperationList = new ArrayList<>(Arrays.asList(
 		"org.apache.bcel.generic.DADD",
         "org.apache.bcel.generic.FADD",
         "org.apache.bcel.generic.IADD",
@@ -76,7 +76,7 @@ public class ConstantFolder
         "org.apache.bcel.generic.LUSHR"
     ));
 
-	ArrayList<String> unList = new ArrayList<>(Arrays.asList(
+	ArrayList<String> unaryOperationList = new ArrayList<>(Arrays.asList(
         "org.apache.bcel.generic.DNEG",
         "org.apache.bcel.generic.FNEG",
         "org.apache.bcel.generic.INEG",
@@ -97,7 +97,7 @@ public class ConstantFolder
         "org.apache.bcel.generic.L2I"
     ));
 
-	ArrayList<String> cpList = new ArrayList<>(Arrays.asList(
+	ArrayList<String> constantLoadList = new ArrayList<>(Arrays.asList(
         "org.apache.bcel.generic.LDC",
         "org.apache.bcel.generic.LDC2_W",
         "org.apache.bcel.generic.LDC_W",
@@ -109,7 +109,7 @@ public class ConstantFolder
         "org.apache.bcel.generic.LCONST"
 	));
 
-	ArrayList<String> zcList = new ArrayList<>(Arrays.asList(
+	ArrayList<String> zeroCompareConditionList = new ArrayList<>(Arrays.asList(
         "org.apache.bcel.generic.IFEQ",
         "org.apache.bcel.generic.IFGE",
         "org.apache.bcel.generic.IFGT",
@@ -118,7 +118,7 @@ public class ConstantFolder
         "org.apache.bcel.generic.IFNE"
     ));
 
-	ArrayList<String> icList = new ArrayList<>(Arrays.asList(
+	ArrayList<String> doubleCompareConditionList = new ArrayList<>(Arrays.asList(
         "org.apache.bcel.generic.IF_ICMPEQ",
         "org.apache.bcel.generic.IF_ICMPGE",
         "org.apache.bcel.generic.IF_ICMPGT",
@@ -146,7 +146,7 @@ public class ConstantFolder
 		if (ins == null)	
 			return false;
 		String cl = ins.getClass().getName();
-		if (binList.contains(cl))
+		if (binaryOperationList.contains(cl))
 		//cl is a binary instruction
 			return true;
 		//cl is not a binary instruction
@@ -158,7 +158,7 @@ public class ConstantFolder
 		if (ins == null)
 		    return false;
 		String cl = ins.getClass().getName();
-		if (unList.contains(cl))
+		if (unaryOperationList.contains(cl))
 		    //cl is an unary instruction
 		    return true;
 		//cl is not an unary instruction
@@ -170,7 +170,7 @@ public class ConstantFolder
 		if (ins == null)
 		    return false;
 		String cl = ins.getClass().getName();
-		if (cpList.contains(cl))
+		if (constantLoadList.contains(cl))
 		    //cl is a cp instruction
 		    return true;
 		//cl is not a cp instruction
@@ -182,7 +182,7 @@ public class ConstantFolder
 		if (ins == null)
 		    return false;
 		String cl = ins.getClass().getName();
-		if (zcList.contains(cl))
+		if (zeroCompareConditionList.contains(cl))
 		    //cl is a cp instruction
 		    return true;
 		//cl is not a cp instruction
@@ -194,7 +194,7 @@ public class ConstantFolder
 		if (ins == null)
 		    return false;
 		String cl = ins.getClass().getName();
-		if (icList.contains(cl))
+		if (doubleCompareConditionList.contains(cl))
 		    //cl is a cp instruction
 		    return true;
 		//cl is not a cp instruction
