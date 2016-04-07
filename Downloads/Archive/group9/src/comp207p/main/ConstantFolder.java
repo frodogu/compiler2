@@ -206,6 +206,8 @@ public class ConstantFolder
 	***/
 	public InstructionHandle addresulttocp(ConstantPoolGen cpgen, Object bottom, Object top, String ins, InstructionList instList, InstructionHandle handle, Map<Integer, Integer> exceptionmap)
 	{
+
+		//push  PUSH(ConstantPoolGen cp, value)
 		InstructionHandle result = null;
 	        try
 	        {
@@ -241,9 +243,10 @@ public class ConstantFolder
 	                	result = instList.insert(handle, new PUSH(cpgen, (long) bottom / (long) top));
 	                	break;
 	           	 	case "org.apache.bcel.generic.DCMPG":
+
 						{
 			                if ((double) bottom > (double) top)
-			                    result = instList.insert(handle, new PUSH(cpgen, 1));
+			                    result = instList.insert(handle, new PUSH(cpgen, 1)); 
 			                else if ((double) bottom == (double) top)
 			                    result = instList.insert(handle, new PUSH(cpgen, 0));
 			                else
@@ -372,6 +375,8 @@ public class ConstantFolder
 
 	    public InstructionHandle addunaryresulttocp(ConstantPoolGen cpgen, Object bottom, String ins, InstructionList instList, InstructionHandle handle, Instruction instru)
 	    {
+	    			//push  PUSH(ConstantPoolGen cp, value)
+
 	        InstructionHandle result = null;
 	        switch (ins) {
 		        case "org.apache.bcel.generic.DNEG":
@@ -434,6 +439,8 @@ public class ConstantFolder
 
 	    public Instruction addZCresulttocp(ConstantPoolGen cpgen, Object bottom, String ins, InstructionList instList, InstructionHandle handle, Instruction instru)
 	    {
+	    	//push  PUSH(ConstantPoolGen cp, value)
+
 	        Instruction result = null;
 			switch (ins) {
 		        case "org.apache.bcel.generic.IFEQ":
@@ -666,63 +673,72 @@ public class ConstantFolder
 	        for (InstructionHandle handle : instList.getInstructionHandles())
 	        {
 	            // if unary instruction
-	            if (isCPInstruction(handle.getInstruction()) && isUnaryInstruction(handle.getNext().getInstruction()))
+	            if (isCPInstruction(handle.getInstruction())  )
 	            {
+	            	if (isUnaryInstruction(handle.getNext().getInstruction()) )
+	            	{
 	                // fold unary
-	                unfinished = true;
-	                Instruction ins = handle.getInstruction();
-	                Object bottom = new Object();
-	                if (ins instanceof LDC)
-	                    bottom = ((LDC) ins).getValue(cpgen);
-	                if (ins instanceof LDC2_W)
-	                    bottom = ((LDC2_W) ins).getValue(cpgen);
-	                if (ins instanceof ConstantPushInstruction)
-	                    bottom = ((ConstantPushInstruction) ins).getValue();
-	                addunaryresulttocp(cpgen, bottom, handle.getNext().getInstruction().getClass().getName(), instList, handle, handle.getNext().getInstruction());
+		                unfinished = true;
+		                Instruction ins = handle.getInstruction();
+		                Object bottom = new Object();
+		                if (ins instanceof LDC)
+		                    bottom = ((LDC) ins).getValue(cpgen);
+		                if (ins instanceof LDC2_W)
+		                    bottom = ((LDC2_W) ins).getValue(cpgen);
+		                if (ins instanceof ConstantPushInstruction)
+		                    bottom = ((ConstantPushInstruction) ins).getValue();
+		                addunaryresulttocp(cpgen, bottom, handle.getNext().getInstruction().getClass().getName(), instList, handle, handle.getNext().getInstruction());
 
-	                try
-	                {
-	                    // delete the old one
-	                    instList.delete(handle.getNext());
-	                    instList.delete(handle);
-	                } catch (TargetLostException e)
-	                {
-	                    // TODO Auto-generated catch block
-	                    e.printStackTrace();
-	                }
+		                try
+		                {
+		                    // delete the old one
+		                    instList.delete(handle.getNext());
+		                    instList.delete(handle);
+		                } catch (TargetLostException e)
+		                {
+		                    // TODO Auto-generated catch block
+		                    e.printStackTrace();
+		                }
+	            	}
 	            }
 	            // if binary instruction
-	            else if (isCPInstruction(handle.getInstruction()) && isCPInstruction(handle.getNext().getInstruction()) && isBinaryOperation(handle.getNext().getNext().getInstruction()))
+	            else if (isCPInstruction(handle.getInstruction()) == true   )
 	            {
+	            	if (isCPInstruction(handle.getNext().getInstruction()) == true)
+	            	{
 	                // fold binary
-	                unfinished = true;
-	                Object bottom = new Object(); //first is second on stack
-	                Object top = new Object(); //second is top on stack
+	            		if (isBinaryOperation(handle.getNext().getNext().getInstruction()) == true)
+	            		{
+			                unfinished = true;
+			                Object bottom = new Object(); //first is second on stack
+			                Object top = new Object(); //second is top on stack
 
-	                Instruction ins = handle.getInstruction();
-	                if (ins instanceof LDC)
-	                    bottom = ((LDC) ins).getValue(cpgen);
-	                if (ins instanceof LDC2_W)
-	                    bottom = ((LDC2_W) ins).getValue(cpgen);
-	                if (ins instanceof ConstantPushInstruction)
-	                    bottom = ((ConstantPushInstruction) ins).getValue();
-	                    
-	                Instruction ins2 = handle.getNext().getInstruction();
-	                if (ins2 instanceof LDC)
-	                    top = ((LDC) ins2).getValue(cpgen);
-	                if (ins2 instanceof LDC2_W)
-	                    top = ((LDC2_W) ins2).getValue(cpgen);
-	                if (ins2 instanceof ConstantPushInstruction)
-	                    top = ((ConstantPushInstruction) ins2).getValue();
+			                Instruction ins = handle.getInstruction();
+			                if (ins instanceof LDC)
+			                    bottom = ((LDC) ins).getValue(cpgen);
+			                if (ins instanceof LDC2_W)
+			                    bottom = ((LDC2_W) ins).getValue(cpgen);
+			                if (ins instanceof ConstantPushInstruction)
+			                    bottom = ((ConstantPushInstruction) ins).getValue();
+			                    
+			                Instruction ins2 = handle.getNext().getInstruction();
+			                if (ins2 instanceof LDC)
+			                    top = ((LDC) ins2).getValue(cpgen);
+			                if (ins2 instanceof LDC2_W)
+			                    top = ((LDC2_W) ins2).getValue(cpgen);
+			                if (ins2 instanceof ConstantPushInstruction)
+			                    top = ((ConstantPushInstruction) ins2).getValue();
 
-	                InstructionHandle new_target = addresulttocp(cpgen, bottom, top, handle.getNext().getNext().getInstruction().getClass().getName(), instList, handle, exceptionmap);
-	                if (new_target.getInstruction() instanceof GotoInstruction)
-	                    delete_instructions(handle, ((GotoInstruction) new_target.getInstruction()).getTarget(), new_target, instList);
-	                else
-	                    replace_instructions(handle, handle.getNext().getNext().getNext(), new_target, instList);
+			                InstructionHandle new_target = addresulttocp(cpgen, bottom, top, handle.getNext().getNext().getInstruction().getClass().getName(), instList, handle, exceptionmap);
+			                if (new_target.getInstruction() instanceof GotoInstruction)
+			                    delete_instructions(handle, ((GotoInstruction) new_target.getInstruction()).getTarget(), new_target, instList);
+			                else
+			                    replace_instructions(handle, handle.getNext().getNext().getNext(), new_target, instList);
+		            	}
+	            	}
 	            }
 	            // if zero comparison
-	            else if (isCPInstruction(handle.getInstruction()) && isZCInstruction(handle.getNext().getInstruction()) && handle.getNext().getNext().getInstruction() instanceof ICONST && ((int) ((ICONST) handle.getNext().getNext().getInstruction()).getValue()) == 1 && handle.getNext().getNext().getNext().getInstruction() instanceof GotoInstruction && handle.getNext().getNext().getNext().getNext().getInstruction() instanceof ICONST && ((int) ((ICONST) handle.getNext().getNext().getNext().getNext().getInstruction()).getValue()) == 0 && ((IfInstruction) handle.getNext().getInstruction()).getTarget() == handle.getNext().getNext().getNext().getNext() && ((GotoInstruction) handle.getNext().getNext().getNext().getInstruction()).getTarget() == handle.getNext().getNext().getNext().getNext().getNext())
+	            else if (isCPInstruction(handle.getInstruction()) == true)
 	            //basically this conditional is looking for the following pattern:
 	            //load int
 	            //zero compare
@@ -731,32 +747,59 @@ public class ConstantFolder
 	            //ICONST_0
 	            //the last 2 checks if the branch instructions are to the correct instruction handles
 	            {
-	                // fold comparison
-	                unfinished = true;
-	                Instruction ins = handle.getInstruction();
-	                Object bottom = new Object();
-	                if (ins instanceof LDC)
-	                    bottom = ((LDC) ins).getValue(cpgen);
-	                if (ins instanceof ConstantPushInstruction)
-	                    bottom = ((ConstantPushInstruction) ins).getValue();
-	                Instruction newins = addZCresulttocp(cpgen, bottom, handle.getNext().getInstruction().getClass().getName(), instList, handle, handle.getNext().getInstruction());
-	                try
-	                {
-	                    // delete the 5 instructions
-	                    handle.getNext().getNext().getNext().getNext().setInstruction(newins);
-	                    instList.delete(handle.getNext().getNext().getNext());
-	                    instList.delete(handle.getNext().getNext());
-	                    instList.delete(handle.getNext());
-	                    instList.delete(handle);
+	            	if (isZCInstruction(handle.getNext().getInstruction())  == true )
+	            	{
+	            		if (handle.getNext().getNext().getInstruction() instanceof ICONST  == true )
+	            		{
+	            			if (((int) ((ICONST) handle.getNext().getNext().getInstruction()).getValue()) == 1)
+	            			{
+	            				if (handle.getNext().getNext().getNext().getInstruction() instanceof GotoInstruction)
+	            				{
+	            					if (handle.getNext().getNext().getNext().getNext().getInstruction() instanceof ICONST)
+	            					{
+	            						if (((int) ((ICONST) handle.getNext().getNext().getNext().getNext().getInstruction()).getValue()) == 0)
+	            						{
+	            							if (((IfInstruction) handle.getNext().getInstruction()).getTarget() == handle.getNext().getNext().getNext().getNext())
+	            							{
+	            								if (((GotoInstruction) handle.getNext().getNext().getNext().getInstruction()).getTarget() == handle.getNext().getNext().getNext().getNext().getNext())
+	            								{
+				            						unfinished = true;
+									                Instruction ins = handle.getInstruction();
+									                Object bottom = new Object();
+									                if (ins instanceof LDC)
+									                    bottom = ((LDC) ins).getValue(cpgen);
+									                if (ins instanceof ConstantPushInstruction)
+									                    bottom = ((ConstantPushInstruction) ins).getValue();
+									                Instruction newins = addZCresulttocp(cpgen, bottom, handle.getNext().getInstruction().getClass().getName(), instList, handle, handle.getNext().getInstruction());
+									                try
+									                {
+									                    // delete the 5 instructions
+									                    handle.getNext().getNext().getNext().getNext().setInstruction(newins);
+									                    instList.delete(handle.getNext().getNext().getNext());
+									                    instList.delete(handle.getNext().getNext());
+									                    instList.delete(handle.getNext());
+									                    instList.delete(handle);
 
-	                } catch (TargetLostException e)
-	                {
-	                    // TODO Auto-generated catch block
-	                    e.printStackTrace();
-	                }
+									                } 
+									                catch (TargetLostException e)
+									                {
+									                    // TODO Auto-generated catch block
+									                    e.printStackTrace();
+									                }
+	            								}
+	            							}
+	            						}
+						            	
+	            					}
+	            				}
+	            			}
+	            		}
+	            	}
+	                // fold comparison
+	                
 	            }
 	            //if integer comparison
-	            else if (isCPInstruction(handle.getInstruction()) && isCPInstruction(handle.getNext().getInstruction()) && isICInstruction(handle.getNext().getNext().getInstruction()) && handle.getNext().getNext().getNext().getInstruction() instanceof ICONST && ((int) ((ICONST) handle.getNext().getNext().getNext().getInstruction()).getValue()) == 1 && handle.getNext().getNext().getNext().getNext().getInstruction() instanceof GotoInstruction && handle.getNext().getNext().getNext().getNext().getNext().getInstruction() instanceof ICONST && ((int) ((ICONST) handle.getNext().getNext().getNext().getNext().getNext().getInstruction()).getValue()) == 0 && ((IfInstruction) handle.getNext().getNext().getInstruction()).getTarget() == handle.getNext().getNext().getNext().getNext().getNext() && ((GotoInstruction) handle.getNext().getNext().getNext().getNext().getInstruction()).getTarget() == handle.getNext().getNext().getNext().getNext().getNext().getNext())
+	            else if (isCPInstruction(handle.getInstruction())  )
 	            //basically this conditional is looking for the following pattern:
 	            //load int
 	            //load int
@@ -766,36 +809,64 @@ public class ConstantFolder
 	            //ICONST_0
 	            //the last 2 checks if the branch instructions are to the correct instruction handles
 	            {
+	            	if (isCPInstruction(handle.getNext().getInstruction()))
+	            	{
+	            		if (isICInstruction(handle.getNext().getNext().getInstruction()))
+	            		{
+	            			if (handle.getNext().getNext().getNext().getInstruction() instanceof ICONST)
+	            			{
+	            				if (((int) ((ICONST) handle.getNext().getNext().getNext().getInstruction()).getValue()) == 1)
+	            				{
+	            					if (handle.getNext().getNext().getNext().getNext().getInstruction() instanceof GotoInstruction)
+	            					{
+	            						if (handle.getNext().getNext().getNext().getNext().getNext().getInstruction() instanceof ICONST)
+	            						{
+	            							if (((int) ((ICONST) handle.getNext().getNext().getNext().getNext().getNext().getInstruction()).getValue()) == 0 )
+	            							{
+	            								if (((IfInstruction) handle.getNext().getNext().getInstruction()).getTarget() == handle.getNext().getNext().getNext().getNext().getNext() )
+	            								{
+	            									if (((GotoInstruction) handle.getNext().getNext().getNext().getNext().getInstruction()).getTarget() == handle.getNext().getNext().getNext().getNext().getNext().getNext() )
+	            									{
+										                unfinished = true;
+										                Object bottom = new Object(); //first is second on stack
+										                Object top = new Object(); //second is top on stack
+										                Instruction ins = handle.getInstruction();
+										                if (ins instanceof LDC)
+										                    bottom = ((LDC) ins).getValue(cpgen);
+										                if (ins instanceof ConstantPushInstruction)
+										                    bottom = ((ConstantPushInstruction) ins).getValue();
+										                    
+										                Instruction ins2 = handle.getNext().getInstruction();
+										                if (ins2 instanceof LDC)
+										                    top = ((LDC) ins2).getValue(cpgen);
+										                if (ins2 instanceof ConstantPushInstruction)
+										                    top = ((ConstantPushInstruction) ins2).getValue();
+										                Instruction newins = addICresulttocp(cpgen, bottom, top, handle.getNext().getNext().getInstruction().getClass().getName(), instList, handle, handle.getNext().getNext().getInstruction());
+										                try
+										                {
+										                    // delete the 5 instructions
+										                    handle.getNext().getNext().getNext().getNext().getNext().setInstruction(newins);
+										                    instList.delete(handle.getNext().getNext().getNext().getNext());
+										                    instList.delete(handle.getNext().getNext().getNext());
+										                    instList.delete(handle.getNext().getNext());
+										                    instList.delete(handle.getNext());
+										                    instList.delete(handle);
+										                } catch (TargetLostException e)
+										                {
+										                    // TODO Auto-generated catch block
+										                    e.printStackTrace();
+										                }
+	            									}
+	            								}
+	            							}
+	            						}
+	            					}
+	            				}
+	            			}
+	            		}
+	            	}
 	                // fold binary
-	                unfinished = true;
-	                Object bottom = new Object(); //first is second on stack
-	                Object top = new Object(); //second is top on stack
-	                Instruction ins = handle.getInstruction();
-	                if (ins instanceof LDC)
-	                    bottom = ((LDC) ins).getValue(cpgen);
-	                if (ins instanceof ConstantPushInstruction)
-	                    bottom = ((ConstantPushInstruction) ins).getValue();
-	                    
-	                Instruction ins2 = handle.getNext().getInstruction();
-	                if (ins2 instanceof LDC)
-	                    top = ((LDC) ins2).getValue(cpgen);
-	                if (ins2 instanceof ConstantPushInstruction)
-	                    top = ((ConstantPushInstruction) ins2).getValue();
-	                Instruction newins = addICresulttocp(cpgen, bottom, top, handle.getNext().getNext().getInstruction().getClass().getName(), instList, handle, handle.getNext().getNext().getInstruction());
-	                try
-	                {
-	                    // delete the 5 instructions
-	                    handle.getNext().getNext().getNext().getNext().getNext().setInstruction(newins);
-	                    instList.delete(handle.getNext().getNext().getNext().getNext());
-	                    instList.delete(handle.getNext().getNext().getNext());
-	                    instList.delete(handle.getNext().getNext());
-	                    instList.delete(handle.getNext());
-	                    instList.delete(handle);
-	                } catch (TargetLostException e)
-	                {
-	                    // TODO Auto-generated catch block
-	                    e.printStackTrace();
-	                }
+
 	            }
 	            //no generic integer comparison branch optimisation due to existence of loops. May implement loop detection in future versions...
 	        }
