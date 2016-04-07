@@ -1294,7 +1294,14 @@ public class ConstantFolder
 	        boolean containsloops = false;
 	        Method[] method = cgen.getMethods();
 	        for (Method m : method)
-	            containsloops = containsloops || detectLoops(cgen, cpgen, m);
+	            //containsloops = containsloops || detectLoops(cgen, cpgen, m);
+	        {
+	        	if (detectLoops(cgen, cpgen, m)==true)
+	        	{
+	        		containsloops=true;
+	        		break;
+	        	}
+	        }
 	        if (containsloops)
 	        { //simplefolding
 		//Do note that in the build.xml file as of the time of this writing, in addition to the 3 tasks, the main and constantfolder class files are also optimised. This may cause confusion due to 5 statements being printed instead of the 3 expected....
@@ -1304,7 +1311,13 @@ public class ConstantFolder
 	                unfinished = false;
 	                Method[] methods = cgen.getMethods();
 	                for (Method m : methods)
-	                    unfinished = unfinished || optimizeMethod(cgen, cpgen, m);
+	                {
+	                	if (optimizeMethod(cgen, cpgen, m)==true)
+	                	{
+	                		unfinished=true;
+	                	}
+	                    //unfinished = unfinished || optimizeMethod(cgen, cpgen, m);
+	                }
 	            }
 	        } else
 	        { //dynamic variable folding
@@ -1316,8 +1329,8 @@ public class ConstantFolder
 	        }
 	        // we generate a new class with modifications
 	        // and store it in a member variable
-	        cgen.setMajor(50);
-		this.optimized = gen.getJavaClass();
+	        cgen.setMajor(45);
+			this.optimized = gen.getJavaClass();
 	}
 
 	public void write(String optimisedFilePath)
