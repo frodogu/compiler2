@@ -36,92 +36,96 @@ public class ConstantFolder
 	JavaClass original = null;
 	JavaClass optimized = null;
 	
-	ArrayList<String> binList = new ArrayList<>(Arrays.asList("org.apache.bcel.generic.DADD",
-            "org.apache.bcel.generic.FADD",
-            "org.apache.bcel.generic.IADD",
-            "org.apache.bcel.generic.LADD",
-            "org.apache.bcel.generic.DDIV",
-            "org.apache.bcel.generic.FDIV",
-            "org.apache.bcel.generic.IDIV",
-            "org.apache.bcel.generic.LDIV",
-            "org.apache.bcel.generic.DCMPG",
-            "org.apache.bcel.generic.DCMPL",
-            "org.apache.bcel.generic.FCMPG",
-            "org.apache.bcel.generic.FCMPL",
-            "org.apache.bcel.generic.LCMP",
-            "org.apache.bcel.generic.DMUL",
-            "org.apache.bcel.generic.FMUL",
-            "org.apache.bcel.generic.IMUL",
-            "org.apache.bcel.generic.LMUL",
-            "org.apache.bcel.generic.DREM",
-            "org.apache.bcel.generic.FREM",
-            "org.apache.bcel.generic.IREM",
-            "org.apache.bcel.generic.LREM",
-            "org.apache.bcel.generic.DSUB",
-            "org.apache.bcel.generic.FSUB",
-            "org.apache.bcel.generic.ISUB",
-            "org.apache.bcel.generic.LSUB",
-            "org.apache.bcel.generic.IAND",
-            "org.apache.bcel.generic.LAND",
-            "org.apache.bcel.generic.IXOR",
-            "org.apache.bcel.generic.LXOR",
-            "org.apache.bcel.generic.IOR",
-            "org.apache.bcel.generic.LOR",
-            "org.apache.bcel.generic.ISHL",
-            "org.apache.bcel.generic.LSHL",
-            "org.apache.bcel.generic.ISHR",
-            "org.apache.bcel.generic.LSHR",
-            "org.apache.bcel.generic.IUSHR",
-            "org.apache.bcel.generic.LUSHR"
+	ArrayList<String> binList = new ArrayList<>(Arrays.asList(
+		"org.apache.bcel.generic.DADD",
+        "org.apache.bcel.generic.FADD",
+        "org.apache.bcel.generic.IADD",
+        "org.apache.bcel.generic.LADD",
+        "org.apache.bcel.generic.DDIV",
+        "org.apache.bcel.generic.FDIV",
+        "org.apache.bcel.generic.IDIV",
+        "org.apache.bcel.generic.LDIV",
+        "org.apache.bcel.generic.DCMPG",
+        "org.apache.bcel.generic.DCMPL",
+        "org.apache.bcel.generic.FCMPG",
+        "org.apache.bcel.generic.FCMPL",
+        "org.apache.bcel.generic.LCMP",
+        "org.apache.bcel.generic.DMUL",
+        "org.apache.bcel.generic.FMUL",
+        "org.apache.bcel.generic.IMUL",
+        "org.apache.bcel.generic.LMUL",
+        "org.apache.bcel.generic.DREM",
+        "org.apache.bcel.generic.FREM",
+        "org.apache.bcel.generic.IREM",
+        "org.apache.bcel.generic.LREM",
+        "org.apache.bcel.generic.DSUB",
+        "org.apache.bcel.generic.FSUB",
+        "org.apache.bcel.generic.ISUB",
+        "org.apache.bcel.generic.LSUB",
+        "org.apache.bcel.generic.IAND",
+        "org.apache.bcel.generic.LAND",
+        "org.apache.bcel.generic.IXOR",
+        "org.apache.bcel.generic.LXOR",
+        "org.apache.bcel.generic.IOR",
+        "org.apache.bcel.generic.LOR",
+        "org.apache.bcel.generic.ISHL",
+        "org.apache.bcel.generic.LSHL",
+        "org.apache.bcel.generic.ISHR",
+        "org.apache.bcel.generic.LSHR",
+        "org.apache.bcel.generic.IUSHR",
+        "org.apache.bcel.generic.LUSHR"
     ));
 
 	ArrayList<String> unList = new ArrayList<>(Arrays.asList(
-            "org.apache.bcel.generic.DNEG",
-            "org.apache.bcel.generic.FNEG",
-            "org.apache.bcel.generic.INEG",
-            "org.apache.bcel.generic.LNEG",
-            "org.apache.bcel.generic.D2F",
-            "org.apache.bcel.generic.D2I",
-            "org.apache.bcel.generic.D2L",
-            "org.apache.bcel.generic.F2D",
-            "org.apache.bcel.generic.F2I",
-            "org.apache.bcel.generic.F2L",
-            "org.apache.bcel.generic.I2B",
-            "org.apache.bcel.generic.I2D",
-            "org.apache.bcel.generic.I2F",
-            "org.apache.bcel.generic.I2L",
-            "org.apache.bcel.generic.I2S",
-            "org.apache.bcel.generic.L2D",
-            "org.apache.bcel.generic.L2F",
-            "org.apache.bcel.generic.L2I"
+        "org.apache.bcel.generic.DNEG",
+        "org.apache.bcel.generic.FNEG",
+        "org.apache.bcel.generic.INEG",
+        "org.apache.bcel.generic.LNEG",
+        "org.apache.bcel.generic.D2F",
+        "org.apache.bcel.generic.D2I",
+        "org.apache.bcel.generic.D2L",
+        "org.apache.bcel.generic.F2D",
+        "org.apache.bcel.generic.F2I",
+        "org.apache.bcel.generic.F2L",
+        "org.apache.bcel.generic.I2B",
+        "org.apache.bcel.generic.I2D",
+        "org.apache.bcel.generic.I2F",
+        "org.apache.bcel.generic.I2L",
+        "org.apache.bcel.generic.I2S",
+        "org.apache.bcel.generic.L2D",
+        "org.apache.bcel.generic.L2F",
+        "org.apache.bcel.generic.L2I"
     ));
 
 	ArrayList<String> cpList = new ArrayList<>(Arrays.asList(
-            "org.apache.bcel.generic.LDC",
-            "org.apache.bcel.generic.LDC2_W",
-            "org.apache.bcel.generic.LDC_W",
-            "org.apache.bcel.generic.BIPUSH",
-            "org.apache.bcel.generic.SIPUSH",
-            "org.apache.bcel.generic.DCONST",
-            "org.apache.bcel.generic.FCONST",
-            "org.apache.bcel.generic.ICONST",
-            "org.apache.bcel.generic.LCONST"));
+        "org.apache.bcel.generic.LDC",
+        "org.apache.bcel.generic.LDC2_W",
+        "org.apache.bcel.generic.LDC_W",
+        "org.apache.bcel.generic.BIPUSH",
+        "org.apache.bcel.generic.SIPUSH",
+        "org.apache.bcel.generic.DCONST",
+        "org.apache.bcel.generic.FCONST",
+        "org.apache.bcel.generic.ICONST",
+        "org.apache.bcel.generic.LCONST"
+	));
 
 	ArrayList<String> zcList = new ArrayList<>(Arrays.asList(
-            "org.apache.bcel.generic.IFEQ",
-            "org.apache.bcel.generic.IFGE",
-            "org.apache.bcel.generic.IFGT",
-            "org.apache.bcel.generic.IFLE",
-            "org.apache.bcel.generic.IFLT",
-            "org.apache.bcel.generic.IFNE"));
+        "org.apache.bcel.generic.IFEQ",
+        "org.apache.bcel.generic.IFGE",
+        "org.apache.bcel.generic.IFGT",
+        "org.apache.bcel.generic.IFLE",
+        "org.apache.bcel.generic.IFLT",
+        "org.apache.bcel.generic.IFNE"
+    ));
 
 	ArrayList<String> icList = new ArrayList<>(Arrays.asList(
-            "org.apache.bcel.generic.IF_ICMPEQ",
-            "org.apache.bcel.generic.IF_ICMPGE",
-            "org.apache.bcel.generic.IF_ICMPGT",
-            "org.apache.bcel.generic.IF_ICMPLE",
-            "org.apache.bcel.generic.IF_ICMPLT",
-            "org.apache.bcel.generic.IF_ICMPNE"));
+        "org.apache.bcel.generic.IF_ICMPEQ",
+        "org.apache.bcel.generic.IF_ICMPGE",
+        "org.apache.bcel.generic.IF_ICMPGT",
+        "org.apache.bcel.generic.IF_ICMPLE",
+        "org.apache.bcel.generic.IF_ICMPLT",
+        "org.apache.bcel.generic.IF_ICMPNE"
+    ));
 	
 	public ConstantFolder(String classFilePath)
 	{
@@ -139,62 +143,62 @@ public class ConstantFolder
 	***/
 	public boolean isBinaryOperation(Instruction ins)
 	{
-	if (ins == null)	
+		if (ins == null)	
+			return false;
+		String cl = ins.getClass().getName();
+		if (binList.contains(cl))
+		//cl is a binary instruction
+			return true;
+		//cl is not a binary instruction
 		return false;
-	String cl = ins.getClass().getName();
-	if (binList.contains(cl))
-	//cl is a binary instruction
-		return true;
-	//cl is not a binary instruction
-	return false;
 	}
 
 	public boolean isUnaryInstruction(Instruction ins)
 	{
-	if (ins == null)
-	    return false;
-	String cl = ins.getClass().getName();
-	if (unList.contains(cl))
-	    //cl is an unary instruction
-	    return true;
-	//cl is not an unary instruction
-	return false;
+		if (ins == null)
+		    return false;
+		String cl = ins.getClass().getName();
+		if (unList.contains(cl))
+		    //cl is an unary instruction
+		    return true;
+		//cl is not an unary instruction
+		return false;
 	}
 
 	public boolean isCPInstruction(Instruction ins)
 	{
-	if (ins == null)
-	    return false;
-	String cl = ins.getClass().getName();
-	if (cpList.contains(cl))
-	    //cl is a cp instruction
-	    return true;
-	//cl is not a cp instruction
-	return false;
+		if (ins == null)
+		    return false;
+		String cl = ins.getClass().getName();
+		if (cpList.contains(cl))
+		    //cl is a cp instruction
+		    return true;
+		//cl is not a cp instruction
+		return false;
 	}
 
 	public boolean isZCInstruction(Instruction ins)
 	{
-	if (ins == null)
-	    return false;
-	String cl = ins.getClass().getName();
-	if (zcList.contains(cl))
-	    //cl is a cp instruction
-	    return true;
-	//cl is not a cp instruction
-	return false;
+		if (ins == null)
+		    return false;
+		String cl = ins.getClass().getName();
+		if (zcList.contains(cl))
+		    //cl is a cp instruction
+		    return true;
+		//cl is not a cp instruction
+		return false;
 	}
 
 	public boolean isICInstruction(Instruction ins)
 	{
-	if (ins == null)
-	    return false;
-	String cl = ins.getClass().getName();
-	if (icList.contains(cl))
-	    //cl is a cp instruction
-	    return true;
-	//cl is not a cp instruction
-	return false;
+		if (ins == null)
+		    return false;
+		String cl = ins.getClass().getName();
+		if (icList.contains(cl))
+		    //cl is a cp instruction
+		    return true;
+		//cl is not a cp instruction
+		return false;
 	}
 	    
 	/***
@@ -205,121 +209,160 @@ public class ConstantFolder
 		InstructionHandle result = null;
 	        try
 	        {
-	            if (ins == "org.apache.bcel.generic.DADD")
-	                result = instList.insert(handle, new PUSH(cpgen, (double) bottom + (double) top));
-	            if (ins == "org.apache.bcel.generic.FADD")
-	                result = instList.insert(handle, new PUSH(cpgen, (float) bottom + (float) top));
-	            if (ins == "org.apache.bcel.generic.IADD")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom + (int) top));
-	            if (ins == "org.apache.bcel.generic.LADD")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom + (long) top));
-	            if (ins == "org.apache.bcel.generic.DDIV")
-	                result = instList.insert(handle, new PUSH(cpgen, (double) bottom / (double) top));
-	            if (ins == "org.apache.bcel.generic.FDIV")
-	            {
-	                int index = cpgen.addFloat((float) bottom / (float) top);
-	                result = instList.insert(handle, new LDC(index));
+	            switch (ins) {
+					case "org.apache.bcel.generic.DADD": 
+		                result = instList.insert(handle, new PUSH(cpgen, (double) bottom + (double) top));
+		                break;
+		        	case "org.apache.bcel.generic.FADD":
+		                result = instList.insert(handle, new PUSH(cpgen, (float) bottom + (float) top));
+		                break;
+		            case "org.apache.bcel.generic.IADD":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom + (int) top));
+		            	break;
+		            case "org.apache.bcel.generic.LADD":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom + (long) top));
+		                break;
+					case "org.apache.bcel.generic.DDIV":
+		        		result = instList.insert(handle, new PUSH(cpgen, (double) bottom / (double) top));
+		                break;
+			        case "org.apache.bcel.generic.FDIV":
+						{
+				            int index = cpgen.addFloat((float) bottom / (float) top);
+				            result = instList.insert(handle, new LDC(index));
+						}
+		        		break;
+	            	case "org.apache.bcel.generic.IDIV":
+						{
+			            	int index = cpgen.addInteger((int) bottom / (int) top);
+			            	result = instList.insert(handle, new LDC(index));
+						}
+	            		break;
+	            	case "org.apache.bcel.generic.LDIV":
+	                	result = instList.insert(handle, new PUSH(cpgen, (long) bottom / (long) top));
+	                	break;
+	           	 	case "org.apache.bcel.generic.DCMPG":
+						{
+			                if ((double) bottom > (double) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 1));
+			                else if ((double) bottom == (double) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 0));
+			                else
+			                    result = instList.insert(handle, new PUSH(cpgen, -1));
+						}
+	            		break;
+					case "org.apache.bcel.generic.DCMPL":
+						{
+			                if ((double) bottom > (double) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 1));
+			                else if ((double) bottom == (double) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 0));
+			                else
+			                    result = instList.insert(handle, new PUSH(cpgen, -1));
+						}
+	            		break;
+	            	case "org.apache.bcel.generic.FCMPG":
+						{
+			                if ((float) bottom > (float) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 1));
+			                else if ((float) bottom == (float) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 0));
+			                else
+			                    result = instList.insert(handle, new PUSH(cpgen, -1));
+						}
+	        		 	break;
+	            	case "org.apache.bcel.generic.FCMPL":
+						{
+			                if ((float) bottom > (float) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 1));
+			                else if ((float) bottom == (float) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 0));
+			                else
+			                    result = instList.insert(handle, new PUSH(cpgen, -1));
+						}
+		            	break;
+	            	case "org.apache.bcel.generic.LCMP":
+						{
+			                if ((long) bottom > (long) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 1));
+			                else if ((long) bottom == (long) top)
+			                    result = instList.insert(handle, new PUSH(cpgen, 0));
+			                else
+			                    result = instList.insert(handle, new PUSH(cpgen, -1));
+						}
+		            	break;
+	            	case "org.apache.bcel.generic.DMUL":
+	                	result = instList.insert(handle, new PUSH(cpgen, (double) bottom * (double) top));
+	                	break;
+	                case "org.apache.bcel.generic.FMUL":
+		                result = instList.insert(handle, new PUSH(cpgen, (float) bottom * (float) top));
+		                break;
+		        	case "org.apache.bcel.generic.IMUL":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom * (int) top));
+		                break;
+					case "org.apache.bcel.generic.LMUL":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom * (long) top));
+		                break;
+		        	case "org.apache.bcel.generic.DREM":
+		                result = instList.insert(handle, new PUSH(cpgen, (double) bottom % (double) top));
+		                break;
+		        	case "org.apache.bcel.generic.FREM":
+		                result = instList.insert(handle, new PUSH(cpgen, (float) bottom % (float) top));
+		                break;
+		       		case "org.apache.bcel.generic.IREM":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom % (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.LREM":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom % (long) top));
+		                break;
+		        	case "org.apache.bcel.generic.DSUB":
+		                result = instList.insert(handle, new PUSH(cpgen, (double) bottom - (double) top));
+		                break;
+		        	case "org.apache.bcel.generic.FSUB":
+		                result = instList.insert(handle, new PUSH(cpgen, (float) bottom - (float) top));
+		                break;
+		        	case "org.apache.bcel.generic.ISUB":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom - (int) top));
+		                break;
+		  			case "org.apache.bcel.generic.LSUB":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom - (long) top));
+		                break;
+	         		case "org.apache.bcel.generic.IAND":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom & (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.LAND":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom & (long) top));
+		                break;
+		        	case "org.apache.bcel.generic.IXOR":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom ^ (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.LXOR":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom ^ (long) top));
+		                break;
+		        	case "org.apache.bcel.generic.IOR":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom | (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.LOR":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom | (long) top));
+		                break;
+		        	case "org.apache.bcel.generic.ISHL":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom << (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.LSHL":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom << (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.ISHR":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom >> (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.LSHR":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom >> (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.IUSHR":
+		                result = instList.insert(handle, new PUSH(cpgen, (int) bottom >>> (int) top));
+		                break;
+		        	case "org.apache.bcel.generic.LUSHR":
+		                result = instList.insert(handle, new PUSH(cpgen, (long) bottom >>> (int) top));
+		                break;
 	            }
-	            if (ins == "org.apache.bcel.generic.IDIV")
-	            {
-	                int index = cpgen.addInteger((int) bottom / (int) top);
-	                result = instList.insert(handle, new LDC(index));
-	            }
-	            if (ins == "org.apache.bcel.generic.LDIV")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom / (long) top));
-	            if (ins == "org.apache.bcel.generic.DCMPG")
-	            {
-	                if ((double) bottom > (double) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 1));
-	                else if ((double) bottom == (double) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 0));
-	                else
-	                    result = instList.insert(handle, new PUSH(cpgen, -1));
-	            }
-	            if (ins == "org.apache.bcel.generic.DCMPL")
-	            {
-	                if ((double) bottom > (double) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 1));
-	                else if ((double) bottom == (double) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 0));
-	                else
-	                    result = instList.insert(handle, new PUSH(cpgen, -1));
-	            }
-	            if (ins == "org.apache.bcel.generic.FCMPG")
-	            {
-	                if ((float) bottom > (float) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 1));
-	                else if ((float) bottom == (float) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 0));
-	                else
-	                    result = instList.insert(handle, new PUSH(cpgen, -1));
-	            }
-	            if (ins == "org.apache.bcel.generic.FCMPL")
-	            {
-	                if ((float) bottom > (float) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 1));
-	                else if ((float) bottom == (float) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 0));
-	                else
-	                    result = instList.insert(handle, new PUSH(cpgen, -1));
-	            }
-	            if (ins == "org.apache.bcel.generic.LCMP")
-	            {
-	                if ((long) bottom > (long) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 1));
-	                else if ((long) bottom == (long) top)
-	                    result = instList.insert(handle, new PUSH(cpgen, 0));
-	                else
-	                    result = instList.insert(handle, new PUSH(cpgen, -1));
-	            }
-	            if (ins == "org.apache.bcel.generic.DMUL")
-	                result = instList.insert(handle, new PUSH(cpgen, (double) bottom * (double) top));
-	            if (ins == "org.apache.bcel.generic.FMUL")
-	                result = instList.insert(handle, new PUSH(cpgen, (float) bottom * (float) top));
-	            if (ins == "org.apache.bcel.generic.IMUL")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom * (int) top));
-	            if (ins == "org.apache.bcel.generic.LMUL")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom * (long) top));
-	            if (ins == "org.apache.bcel.generic.DREM")
-	                result = instList.insert(handle, new PUSH(cpgen, (double) bottom % (double) top));
-	            if (ins == "org.apache.bcel.generic.FREM")
-	                result = instList.insert(handle, new PUSH(cpgen, (float) bottom % (float) top));
-	            if (ins == "org.apache.bcel.generic.IREM")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom % (int) top));
-	            if (ins == "org.apache.bcel.generic.LREM")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom % (long) top));
-	            if (ins == "org.apache.bcel.generic.DSUB")
-	                result = instList.insert(handle, new PUSH(cpgen, (double) bottom - (double) top));
-	            if (ins == "org.apache.bcel.generic.FSUB")
-	                result = instList.insert(handle, new PUSH(cpgen, (float) bottom - (float) top));
-	            if (ins == "org.apache.bcel.generic.ISUB")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom - (int) top));
-	            if (ins == "org.apache.bcel.generic.LSUB")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom - (long) top));
-	            if (ins == "org.apache.bcel.generic.IAND")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom & (int) top));
-	            if (ins == "org.apache.bcel.generic.LAND")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom & (long) top));
-	            if (ins == "org.apache.bcel.generic.IXOR")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom ^ (int) top));
-	            if (ins == "org.apache.bcel.generic.LXOR")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom ^ (long) top));
-	            if (ins == "org.apache.bcel.generic.IOR")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom | (int) top));
-	            if (ins == "org.apache.bcel.generic.LOR")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom | (long) top));
-	            if (ins == "org.apache.bcel.generic.ISHL")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom << (int) top));
-	            if (ins == "org.apache.bcel.generic.LSHL")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom << (int) top));
-	            if (ins == "org.apache.bcel.generic.ISHR")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom >> (int) top));
-	            if (ins == "org.apache.bcel.generic.LSHR")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom >> (int) top));
-	            if (ins == "org.apache.bcel.generic.IUSHR")
-	                result = instList.insert(handle, new PUSH(cpgen, (int) bottom >>> (int) top));
-	            if (ins == "org.apache.bcel.generic.LUSHR")
-	                result = instList.insert(handle, new PUSH(cpgen, (long) bottom >>> (int) top));
 	            return result;
 	        } catch (Exception e)
 	        {
