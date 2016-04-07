@@ -444,7 +444,6 @@ public class ConstantFolder
 	                result = new ICONST(0);
 	            else
 	                result = new ICONST(1);
-	            }
 	        }
 	        if (ins == "org.apache.bcel.generic.IF_ICMPLE")
 	        {
