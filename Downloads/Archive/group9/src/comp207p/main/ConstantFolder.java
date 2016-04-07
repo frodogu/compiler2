@@ -373,180 +373,238 @@ public class ConstantFolder
 	    public InstructionHandle addunaryresulttocp(ConstantPoolGen cpgen, Object bottom, String ins, InstructionList instList, InstructionHandle handle, Instruction instru)
 	    {
 	        InstructionHandle result = null;
-
-	        if (ins == "org.apache.bcel.generic.DNEG")
-	            result = instList.insert(handle, new PUSH(cpgen, -(double) bottom));
-	        if (ins == "org.apache.bcel.generic.FNEG")
-	            result = instList.insert(handle, new PUSH(cpgen, -(float) bottom));
-	        if (ins == "org.apache.bcel.generic.INEG")
-	            result = instList.insert(handle, new PUSH(cpgen, -(int) bottom));
-	        if (ins == "org.apache.bcel.generic.LNEG")
-	            result = instList.insert(handle, new PUSH(cpgen, -(long) bottom));
-	        if (ins == "org.apache.bcel.generic.D2F")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).floatValue()));
-	        if (ins == "org.apache.bcel.generic.D2I")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).intValue()));
-	        if (ins == "org.apache.bcel.generic.D2L")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).longValue()));
-	        if (ins == "org.apache.bcel.generic.F2D")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).doubleValue()));
-	        if (ins == "org.apache.bcel.generic.F2I")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).intValue()));
-	        if (ins == "org.apache.bcel.generic.F2L")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).longValue()));
-	        if (ins == "org.apache.bcel.generic.I2B")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).byteValue()));
-	        if (ins == "org.apache.bcel.generic.I2D")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).doubleValue()));
-	        if (ins == "org.apache.bcel.generic.I2F")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).floatValue()));
-	        if (ins == "org.apache.bcel.generic.I2L")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).longValue()));
-	        if (ins == "org.apache.bcel.generic.I2S")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).shortValue()));
-	        if (ins == "org.apache.bcel.generic.L2D")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).doubleValue()));
-	        if (ins == "org.apache.bcel.generic.L2F")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).floatValue()));
-	        if (ins == "org.apache.bcel.generic.L2I")
-	            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).intValue()));
+	        switch (ins) {
+		        case "org.apache.bcel.generic.DNEG":
+		        	result = instList.insert(handle, new PUSH(cpgen, -(double) bottom));
+		        	break;
+		        case "org.apache.bcel.generic.FNEG":
+					result = instList.insert(handle, new PUSH(cpgen, -(float) bottom));
+		        	break;
+		        case "org.apache.bcel.generic.INEG":
+					result = instList.insert(handle, new PUSH(cpgen, -(int) bottom));
+					break;
+		        case "org.apache.bcel.generic.LNEG":
+		            result = instList.insert(handle, new PUSH(cpgen, -(long) bottom));
+		        	break;
+		        case "org.apache.bcel.generic.D2F":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).floatValue()));
+		        	break;
+		        case "org.apache.bcel.generic.D2I":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).intValue()));
+		        	break;
+		        case "org.apache.bcel.generic.D2L":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).longValue()));
+		        	break;
+		        case "org.apache.bcel.generic.F2D":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).doubleValue()));
+		        	break;
+		        case "org.apache.bcel.generic.F2I":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).intValue()));
+		        	break;
+		        case "org.apache.bcel.generic.F2L":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).longValue()));
+		        	break;
+		        case "org.apache.bcel.generic.I2B":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).byteValue()));
+		        	break;
+		        case "org.apache.bcel.generic.I2D":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).doubleValue()));
+		        	break;
+		        case "org.apache.bcel.generic.I2F":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).floatValue()));
+		        	break;
+		        case "org.apache.bcel.generic.I2L":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).longValue()));
+		        	break;
+		        case "org.apache.bcel.generic.I2S":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).shortValue()));
+		        	break;
+		        case "org.apache.bcel.generic.L2D":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).doubleValue()));
+		        	break;
+		        case "org.apache.bcel.generic.L2F":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).floatValue()));
+		        	break;
+		        case "org.apache.bcel.generic.L2I":
+		            result = instList.insert(handle, new PUSH(cpgen, ((Number) bottom).intValue()));
+		        	break;
+	        }
 	        return result;
 	    }
 
 	    public Instruction addZCresulttocp(ConstantPoolGen cpgen, Object bottom, String ins, InstructionList instList, InstructionHandle handle, Instruction instru)
 	    {
 	        Instruction result = null;
-
-	        if (ins == "org.apache.bcel.generic.IFEQ")
-	        {
-	            if ((int) bottom == 0)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-
-	        if (ins == "org.apache.bcel.generic.IFGE")
-	        {
-	            if ((int) bottom >= 0)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IFGT")
-	        {
-	            if ((int) bottom > 0)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IFLE")
-	        {
-	            if ((int) bottom <= 0)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IFLT")
-	        {
-	            if ((int) bottom < 0)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IFNE")
-	        {
-	            if ((int) bottom != 0)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
+			switch (ins) {
+		        case "org.apache.bcel.generic.IFEQ":
+			        {
+			            if ((int) bottom == 0)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IFGE":
+			        {
+			            if ((int) bottom >= 0)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IFGT":
+			        {
+			            if ((int) bottom > 0)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IFLE":
+			        {
+			            if ((int) bottom <= 0)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IFLT":
+			        {
+			            if ((int) bottom < 0)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IFNE":
+			        {
+			            if ((int) bottom != 0)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		    }
 	        return result;
 	    }
 
 	    public Instruction addICresulttocp(ConstantPoolGen cpgen, Object bottom, Object top, String ins, InstructionList instList, InstructionHandle handle, Instruction instru)
 	    {
 	        Instruction result = null;
-
-	        if (ins == "org.apache.bcel.generic.IF_ICMPEQ")
-	        {
-	            if ((int) bottom == (int) top)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IF_ICMPGE")
-	        {
-	            if ((int) bottom >= (int) top)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IF_ICMPGT")
-	        {
-	            if ((int) bottom > (int) top)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IF_ICMPLE")
-	        {
-	            if ((int) bottom <= (int) top)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IF_ICMPLT")
-	        {
-	            if ((int) bottom < (int) top)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
-	        if (ins == "org.apache.bcel.generic.IF_ICMPNE")
-	        {
-	            if ((int) bottom != (int) top)
-	                result = new ICONST(0);
-	            else
-	                result = new ICONST(1);
-	        }
+			switch (ins) {
+		        case "org.apache.bcel.generic.IF_ICMPEQ":
+			        {
+			            if ((int) bottom == (int) top)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IF_ICMPGE":
+			        {
+			            if ((int) bottom >= (int) top)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IF_ICMPGT":
+			        {
+			            if ((int) bottom > (int) top)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IF_ICMPLE":
+			        {
+			            if ((int) bottom <= (int) top)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IF_ICMPLT":
+			        {
+			            if ((int) bottom < (int) top)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		        case "org.apache.bcel.generic.IF_ICMPNE":
+			        {
+			            if ((int) bottom != (int) top)
+			                result = new ICONST(0);
+			            else
+			                result = new ICONST(1);
+			        }
+			        break;
+		    }
 	        return result;
 	    }
 
 	    public InstructionHandle addZCbranchresulttocp(ConstantPoolGen cpgen, Object bottom, String ins, InstructionList instList, InstructionHandle handle, IfInstruction instru)
 	    {
 	        InstructionHandle result = null;
-
-	        if ((ins == "org.apache.bcel.generic.IFEQ")&&((int) bottom == 0))
-			result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IFGE")&&((int) bottom >= 0))
-			result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IFGT")&&(int) bottom > 0)
-			result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IFLE")&&((int) bottom <= 0))
-			result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IFLT")&&((int) bottom < 0))
-	                result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IFNE")&&((int) bottom != 0))
-	                result = instList.insert(handle, new GOTO(instru.getTarget()));
+			switch (ins) {
+		        case "org.apache.bcel.generic.IFEQ":
+		        	if((int) bottom == 0)
+						result = instList.insert(handle, new GOTO(instru.getTarget()));
+					break;
+		        case "org.apache.bcel.generic.IFGE":
+		        	if((int) bottom >= 0)
+						result = instList.insert(handle, new GOTO(instru.getTarget()));
+					break;
+		        case "org.apache.bcel.generic.IFGT":
+					if((int) bottom > 0)
+						result = instList.insert(handle, new GOTO(instru.getTarget()));
+					break;
+		        case "org.apache.bcel.generic.IFLE":
+		        	if((int) bottom <= 0)
+						result = instList.insert(handle, new GOTO(instru.getTarget()));
+					break;
+		        case "org.apache.bcel.generic.IFLT":
+		        	if((int) bottom < 0)
+		            	result = instList.insert(handle, new GOTO(instru.getTarget()));
+		        	break;
+		        case "org.apache.bcel.generic.IFNE":
+		        	if((int) bottom != 0)
+		            	result = instList.insert(handle, new GOTO(instru.getTarget()));
+		        	break;
+		    }
 	        return result;
 	    }
 
 	    public InstructionHandle addICbranchresulttocp(ConstantPoolGen cpgen, Object bottom, Object top, String ins, InstructionList instList, InstructionHandle handle, IfInstruction instru)
 	    {
 	        InstructionHandle result = null;
-
-	        if ((ins == "org.apache.bcel.generic.IF_ICMPEQ")&&((int) bottom == (int) top))
-	                result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IF_ICMPGE")&&((int) bottom >= (int) top))
-	                result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IF_ICMPGT")&&((int) bottom > (int) top))
-	                result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IF_ICMPLE")&&((int) bottom <= (int) top))
-	                result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IF_ICMPLT")&&((int) bottom < (int) top))
-	                result = instList.insert(handle, new GOTO(instru.getTarget()));
-	        if ((ins == "org.apache.bcel.generic.IF_ICMPNE")&&((int) bottom != (int) top))
-	                result = instList.insert(handle, new GOTO(instru.getTarget()));
+			switch (ins) {
+		        case "org.apache.bcel.generic.IF_ICMPEQ":
+		        	if((int) bottom == (int) top)
+						result = instList.insert(handle, new GOTO(instru.getTarget()));
+		            break;
+		        case "org.apache.bcel.generic.IF_ICMPGE":
+		        	if((int) bottom >= (int) top)
+		                result = instList.insert(handle, new GOTO(instru.getTarget()));
+		            break;
+		        case "org.apache.bcel.generic.IF_ICMPGT":
+		        	if((int) bottom > (int) top)
+		                result = instList.insert(handle, new GOTO(instru.getTarget()));
+		            break;
+		        case "org.apache.bcel.generic.IF_ICMPLE":
+		        	if((int) bottom <= (int) top)
+		                result = instList.insert(handle, new GOTO(instru.getTarget()));
+		            break;
+		        case "org.apache.bcel.generic.IF_ICMPLT":
+		        	if((int) bottom < (int) top)
+		                result = instList.insert(handle, new GOTO(instru.getTarget()));
+		            break;
+		        case"org.apache.bcel.generic.IF_ICMPNE":
+		        	if((int) bottom != (int) top)
+		                result = instList.insert(handle, new GOTO(instru.getTarget()));
+		            break;
+			}
 	        return result;
 	    }
 
